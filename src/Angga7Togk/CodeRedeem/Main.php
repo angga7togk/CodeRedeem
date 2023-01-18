@@ -14,7 +14,10 @@ use pocketmine\utils\Config;
 use jojoe77777\FormAPI\CustomForm;
 
 class Main extends PluginBase implements Listener {
-
+	
+	public $cfg;
+	public dt;
+	
 	 public function onEnable() : void {
 	 	$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	 	$this->saveResource("config.yml");

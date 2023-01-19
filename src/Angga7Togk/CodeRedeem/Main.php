@@ -2,9 +2,7 @@
 
 namespace Angga7Togk\CodeRedeem;
 
-use pocketmine\Server;
 use pocketmine\player\Player;
-use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\{Command, CommandSender};
 use pocketmine\console\ConsoleCommandSender;
@@ -15,8 +13,8 @@ use jojoe77777\FormAPI\CustomForm;
 
 class Main extends PluginBase implements Listener {
 	
-	public $cfg;
-	public $dt;
+	public Config $cfg;
+	public Config $dt;
 	
 	 public function onEnable() : void {
 	 	$this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -31,19 +29,19 @@ class Main extends PluginBase implements Listener {
 	 	switch($cmd->getName()){
 	 		case "coderedeem":
 	 			$this->MenuUI($sender);
-	 		break;
+	 			break;
 
 	 		case "codereset":
 	 			$sender->sendMessage("Berhasil Reset Data Player.");
 	 			$this->dt->removeNested("Data");
 	 			$this->dt->save();
 	 			$this->dt->reload();
-	 		break;
+	 			break;
 	 	}
 	 	return true;
 	 }
 
-	 public function MenuUI($player){
+	 public function MenuUI(Player $player){
 	 	$form = new CustomForm(function(Player $player, $data){
 	 	if($data === null){
 	 		return true;
@@ -66,7 +64,6 @@ class Main extends PluginBase implements Listener {
 	 	$form->setTitle($this->cfg->get("Title"));
 	 	$form->addLabel($this->cfg->get("Content"));
 	 	$form->addInput("Input Code:", "Example : ABOGOBOGA");
-	 	$form->sendToPlayer($player);
-	 	return $form;
+	 	$player->sendForm($form);
 	 }
 }

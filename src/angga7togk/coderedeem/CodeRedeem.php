@@ -9,7 +9,7 @@ use pocketmine\console\ConsoleCommandSender;
 use pocketmine\event\Listener;
 use pocketmine\utils\Config;
 
-use angga7togk\coderedeem\libs\jojoe77777\FormAPI\CustomForm;
+use angga7togk\coderedeem\libs\CustomForm;
 
 class CodeRedeem extends PluginBase implements Listener {
 	

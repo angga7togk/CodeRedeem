@@ -3,17 +3,17 @@ This plugin is useful for giving server gifts via code
 
 you can set the redeem code as you like in the config.yml
 
-# Important Tips
+# 💡Important Tips
 After changing the code or reward in the config.yml, try to delete the data.json, so that the coderedeem you just changed can be used,
 
 No Need to Restart Server After Changing Config
 
-# Command
+# 🗨Command
 Command | Description 
 --- | ---
 `/coderedeem` | Open The CodeRedeem Menu
 
-# config 
+# ⚙config 
 ```
 Title: "CodeRedeem"
 Content: "enter the correct redeem code, and get a prize."

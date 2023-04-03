@@ -9,5 +9,5 @@ projects:
       - src: Infernus101/FormAPI/libFormAPI
         version: ^2.1.0
   icon:
-    path: "icon-cr.png"
+    path: "icon2.png"
 ...

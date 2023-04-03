@@ -1,6 +1,6 @@
 name: CodeRedeem
-main: Angga7Togk\coderedeem\CodeRedeem
-version: 1.0.0
+main: angga7togk\coderedeem\CodeRedeem
+version: 1.2.0
 api: 4.0.0
 author: Angga7Togk
 description: "CodeRedeem"

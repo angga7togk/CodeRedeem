@@ -1,20 +1,21 @@
 name: CodeRedeem
-main: Angga7Togk\CodeRedeem\Main
+main: Angga7Togk\coderedeem\CodeRedeem
 version: 1.0.0
 api: 4.0.0
 author: Angga7Togk
-description: "CodeRedeem Plugin"
+description: "CodeRedeem"
 
 commands:
   coderedeem:
     description: "Open The CodeRedeem Menu"
     permission: coderedeem.cmd
-  codereset:
-    description: "Reset Data Player."
-    permission: codereset.cmd
+    aliases: [cr]
+  setcode:
+    description: "Set CodeRedeem"
+    permission: coderedeem.admin
 
 permissions:
   coderedeem.cmd:
     default: true
-  codereset.cmd:
+  coderedeem.admin:
     default: op

@@ -10,12 +10,7 @@ commands:
     description: "Open The CodeRedeem Menu"
     permission: coderedeem.cmd
     aliases: [cr]
-  setcode:
-    description: "Set CodeRedeem"
-    permission: coderedeem.admin
 
 permissions:
   coderedeem.cmd:
     default: true
-  coderedeem.admin:
-    default: op

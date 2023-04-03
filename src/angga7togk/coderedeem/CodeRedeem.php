@@ -10,44 +10,36 @@ use pocketmine\event\Listener;
 use pocketmine\utils\Config;
 
 use angga7togk\coderedeem\libs\CustomForm;
+use angga7togk\coderedeem\updater\ConfigUpdate;
 
 class CodeRedeem extends PluginBase implements Listener {
 	
 	public Config $cfg;
 	public Config $dt;
+	public $cfgversion;
+	public $cv;
+
+	const cfgversion = "1.0";
 	
 	 public function onEnable() : void {
 	 	$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	 	$this->saveResource("config.yml");
 		$this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML, array());
 		$this->dt = new Config($this->getDataFolder() . "data.json", Config::JSON);
+
+		$this->cfgversion = self::cfgversion;
+
+		$this->cv = new ConfigUpdate($this);
+		$this->cv->ConfigUpdate();
 	 }
 
 	 public function onCommand(CommandSender $sender, Command $cmd, String $label, Array $args) : bool {
 
-	 	switch($cmd->getName()){
-	 		case "coderedeem":
-	 			$this->MenuUI($sender);
-	 			break;
-
-	 		case "setcode":
-				if(isset($args[0])){
-					if(isset($args[1])){
-						$this->cfg->setNested("Prize".".Code", $args[0]);
-						$this->cfg->setNested("Prize".".Command-Give", $args[1]);
-						$this->cfg->save();
-						$this->cfg->reload();
-						unlink($this->getDataFolder(). "data.json");
-						$this->dt->reload();
-						$sender->sendMessage("Succes Set Code ".$args[0]);
-					}else{
-						$sender->sendMessage("usage: /setcode <code> <command-give>");
-					}
-				}else{
-					$sender->sendMessage("usage: /setcode <code> <command-give>");
-				}
-	 			break;
-	 	}
+		if($cmd->getName() == "coderedeem"){
+			$this->MenuUI($sender);
+			$this->cfg->reload();
+			$this->dt->reload();
+		}
 	 	return true;
 	 }
 
@@ -56,12 +48,13 @@ class CodeRedeem extends PluginBase implements Listener {
 	 	if($data === null){
 	 		return true;
 	 	}
-	 	$command = str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Command-Give"]);
 			if($data[1] === $this->cfg->get("Prize")["Code"]){
 				if($this->dt->exists($player->getName())){
 					$player->sendMessage($this->cfg->get("Prize")["Message-Claimed"]);
 				} else {
-					$this->getServer()->getCommandMap()->dispatch(new ConsoleCommandsender($this->getServer(), $this->getServer()->getLanguage()), $command);
+					foreach($this->cfg->get("Reward") as $reward){
+						$this->getServer()->getCommandMap()->dispatch(new ConsoleCommandsender($this->getServer(), $this->getServer()->getLanguage()), str_replace("{player}", $player->getName(), $reward));
+					}
 					$player->getServer()->broadcastMessage(str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Message-Succes"]));
 					$this->dt->setNested($player->getName(), true);
 					$this->dt->save();

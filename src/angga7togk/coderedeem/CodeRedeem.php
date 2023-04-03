@@ -38,6 +38,7 @@ class CodeRedeem extends PluginBase implements Listener {
 						$this->cfg->save();
 						$this->cfg->reload();
 						unlink($this->getDataFolder(). "data.json");
+						$this->dt->reload();
 						$sender->sendMessage("Succes Set Code ".$args[0]);
 					}else{
 						$sender->sendMessage("usage: /setcode <code> <command-give>");
@@ -57,12 +58,12 @@ class CodeRedeem extends PluginBase implements Listener {
 	 	}
 	 	$command = str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Command-Give"]);
 			if($data[1] === $this->cfg->get("Prize")["Code"]){
-				if($this->dt->getNested("Data."."\"".$player->getName()."\"") === $this->dt->getNested("Data."."\"".$player->getName()."\"", true)){
+				if($this->dt->exists($player->getName())){
 					$player->sendMessage($this->cfg->get("Prize")["Message-Claimed"]);
 				} else {
 					$this->getServer()->getCommandMap()->dispatch(new ConsoleCommandsender($this->getServer(), $this->getServer()->getLanguage()), $command);
 					$player->getServer()->broadcastMessage(str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Message-Succes"]));
-					$this->dt->setNested("Data."."\"".$player->getName()."\"", true);
+					$this->dt->setNested($player->getName(), true);
 					$this->dt->save();
 					$this->dt->reload();
 				}

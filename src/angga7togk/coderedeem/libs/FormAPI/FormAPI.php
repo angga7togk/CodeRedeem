@@ -2,10 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace angga7togk\coderedeem\libs;
+namespace angga7togk\coderedeem\libs\FormAPI;
 
 use pocketmine\plugin\PluginBase;
-use angga7togk\coderedeem\libs\SimpleForm;
+use angga7togk\coderedeem\libs\FormAPI\ModalForm;
+use angga7togk\coderedeem\libs\FormAPI\CustomForm;
+use angga7togk\coderedeem\libs\FormAPI\SimpleForm;
 
 class FormAPI extends PluginBase{
 

@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace angga7togk\coderedeem\libs;
+namespace angga7togk\coderedeem\libs\FormAPI;
 
 class ModalForm extends Form {
 

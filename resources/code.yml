@@ -1,6 +1,9 @@
 CodeRedeem:
-  NewYears:
-    name: "NewYears"
-    code: "ABOGOBOGA"
-    reward:
-    - "give ad"
+  ABOGOBOGA:
+    Reward:
+    - "give {player} apple 1"
+    - "give {player} bread 1"
+  HESOYAM:
+    Reward:
+    - "give {player} apple 1"
+    - "give {player} bread 1"

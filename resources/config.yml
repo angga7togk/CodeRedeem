@@ -1,12 +1,7 @@
 Title: "CodeRedeem"
 Content: "enter the correct redeem code, and get a prize."
 
-Reward:
-  - "give {player} apple 1"
-  - "give {player} bread 1"
-
 Prize:
-  Code: "ABOGOBOGA"
   Message-Succes: "Congratulations, {player} have won the code redeem prize."
   Message-Failed: "Your code is wrong, please try again."
   Message-Claimed: "You have got a Code Redem prize."

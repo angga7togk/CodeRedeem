@@ -1,0 +1,6 @@
+CodeRedeem:
+  NewYears:
+    name: "NewYears"
+    code: "ABOGOBOGA"
+    reward:
+    - "give ad"

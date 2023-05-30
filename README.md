@@ -1,6 +1,5 @@
 # CodeRedeem
-This plugin is useful for giving server gifts via code
-
+This plugin is useful for giving server gifts via code</br>
 you can set the redeem code as you like in the config.yml
 
 # 💡Important Tips

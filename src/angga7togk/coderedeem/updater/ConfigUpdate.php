@@ -14,7 +14,7 @@ class ConfigUpdate {
 
     public function ConfigUpdate(){
         if($this->plugin->cfg->exists("Config-Version")){
-            if($this->plugin->cfg->get("Config-Version") == $this->plugin->cfgversion){
+            if($this->plugin->cfg->get("Config-Version") == CodeRedeem::cfgversion){
                 $this->plugin->saveResource("config.yml");
             }else{
                 rename($this->plugin->getDataFolder(). "config.yml", $this->plugin->getDataFolder()."config_old.yml");

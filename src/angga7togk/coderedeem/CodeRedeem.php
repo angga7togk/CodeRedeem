@@ -16,12 +16,10 @@ use pocketmine\utils\TextFormat as TF;
 
 class CodeRedeem extends PluginBase implements Listener
 {
-    public $cfg;
-    private $dt;
+    public Config $cfg, $cd, $data;
     public $cv;
-    public $cd;
     const cfgversion = "1.0";
-	const prefix = TF::GOLD."[CodeRedeem ]".TF::RESET;
+    const prefix = TF::GOLD . "[CodeRedeem ]" . TF::RESET;
 
     public function onEnable(): void
     {
@@ -30,74 +28,66 @@ class CodeRedeem extends PluginBase implements Listener
         $this->saveResource("code.yml");
         $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML, array());
         $this->cd = new Config($this->getDataFolder() . "code.yml", Config::YAML);
-        @mkdir($this->getDataFolder()."data");
+        $this->data = new Config($this->getDataFolder() . "data.yml", Config::YAML, array());
 
-		// ConfigUpdate
+        // ConfigUpdate
         $this->cv = new ConfigUpdate($this);
         $this->cv->ConfigUpdate();
     }
 
-	/** @param CommandSender $sender
-	 * @param Command $cmd
-	 * @param string $label
-	 * @param array $args
-	 */
+    /** @param CommandSender $sender
+     * @param Command $cmd
+     * @param string $label
+     * @param array $args
+     */
     public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool
     {
         if ($cmd->getName() == "coderedeem") {
-            $config = new Config($this->getDataFolder() . "data/".strtolower($sender->getName()).".yml", Config::YAML);
-            if(!is_file($this->getDataFolder() . "data/".strtolower($sender->getName()).".yml")){
-                $config->setAll([]);
-                $config->save();
-            }
-			$this->cfg->reload();
-            $config->reload();
-            $this->cd->reload();
             $this->MenuUI($sender);
         }
         return true;
     }
 
-    public function onJoin(PlayerJoinEvent $event){
+    public function onJoin(PlayerJoinEvent $event)
+    {
         $player = $event->getPlayer();
-        $config = new Config($this->getDataFolder() . "data/".strtolower($player->getName()).".yml", Config::YAML);
-        if(!is_file($this->getDataFolder() . "data/".strtolower($player->getName()).".yml")){
-            $config->setAll([]);
-            $config->save();
+        if (!$this->data->exists(strtolower($player->getName()))) {
+            $this->data->set(strtolower($player->getName()), []);
+            $this->data->save();
         }
     }
 
-	/** @param Player $player */
+    /** @param Player $player */
     public function MenuUI(Player $player)
-    {   
-        $this->dt = new Config($this->getDataFolder()."data/".strtolower($player->getName()).".yml", Config::YAML, []);
+    {
         $form = new CustomForm(function (Player $player, $data) {
             if ($data === null) {
                 return true;
             }
-			// Delete Chache
-			if(isset($this->dt->get("Code-Claimed")[$data[1]])){
-				if(!isset($this->cd->get("CodeRedeem")[$data[1]])){
-					$this->dt->removeNested("Code-Claimed.".$data[1]);
-					$this->dt->save();
-					$player->sendMessage(self::prefix.$this->cfg->get("Prize")["Message-Failed"]);
-					return;
-				}
-			}
-			if(!isset($this->cd->get("CodeRedeem")[$data[1]])){
-				$player->sendMessage(self::prefix.$this->cfg->get("Prize")["Message-Failed"]);
-				return;
-			}
-			if(isset($this->dt->get("Code-Claimed")[$data[1]])){
-				$player->sendMessage(self::prefix.$this->cfg->get("Prize")["Message-Claimed"]);
-				return;
-			}
-			foreach($this->cd->get("CodeRedeem")[$data[1]]["Reward"] as $cmd){
-				$this->getServer()->getCommandMap()->dispatch(new ConsoleCommandSender($this->getServer(), $this->getServer()->getLanguage()), str_replace("{player}", $player->getName(), $cmd));
-			}
-			$this->dt->setNested("Code-Claimed.".$data[1], true);
-			$this->dt->save();
-			$player->sendMessage(self::prefix.str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Message-Succes"]));
+            $nameLower = strtolower($player->getName());
+            // Delete Chache
+            if (isset($this->data->get($nameLower)[$data[1]])) {
+                if (!isset($this->cd->get("CodeRedeem")[$data[1]])) {
+                    $this->data->removeNested($nameLower . "." . $data[1]);
+                    $this->data->save();
+                    $player->sendMessage(self::prefix . $this->cfg->get("Prize")["Message-Failed"]);
+                    return;
+                }
+            }
+            if (!isset($this->cd->get("CodeRedeem")[$data[1]])) {
+                $player->sendMessage(self::prefix . $this->cfg->get("Prize")["Message-Failed"]);
+                return;
+            }
+            if (isset($this->data->get($nameLower)[$data[1]])) {
+                $player->sendMessage(self::prefix . $this->cfg->get("Prize")["Message-Claimed"]);
+                return;
+            }
+            foreach ($this->cd->get("CodeRedeem")[$data[1]]["Reward"] as $cmd) {
+                $this->getServer()->getCommandMap()->dispatch(new ConsoleCommandSender($this->getServer(), $this->getServer()->getLanguage()), str_replace("{player}", $player->getName(), $cmd));
+            }
+            $this->data->setNested($nameLower . "." . $data[1], true);
+            $this->data->save();
+            $player->sendMessage(self::prefix . str_replace("{player}", $player->getName(), $this->cfg->get("Prize")["Message-Succes"]));
         });
         $form->setTitle($this->cfg->get("Title"));
         $form->addLabel($this->cfg->get("Content"));
